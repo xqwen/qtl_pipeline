@@ -1,2 +1,1 @@
-# qtl_pipeline
-software pipeline for molecular QTL analysis
+# software pipeline for molecular QTL analysis
