@@ -2,7 +2,7 @@
 
 This page provides a step-by-by guide to analyze cis-eQTL data (from a single tissue) using the software package DAP, which enables highly effient Bayesian multi-SNP analysis. Among many important features, DAP allows to incorporate genomic annotations into the eQTL mapping.
 
-Here we show a step-by-step guide to analyze a subset of [GEUVADIS](http://www.geuvadis.org/) data that contains genotype-expression data for 92 Toscani samples. This data set contains expression data of 11,837 protein-coding and LincRNA genes measured in LCLs. The candidate SNPs for cis-eQTL mapping are those within the 100kb radius of the trasnscription start site (TSS) of each gene.      
+Here we show a step-by-step guide to analyze a subset of [GEUVADIS](http://www.geuvadis.org/) data that contains genotype-expression data for 92 Toscani(TSI) samples. This data set contains expression data of 11,837 protein-coding and LincRNA genes measured in LCLs. The candidate SNPs for cis-eQTL mapping are those within the 100kb radius of the trasnscription start site (TSS) of each gene.      
 
 The described analysis is performed in a single multi-core Linux box. The procedure utilizes the feature of multi-thread processing. It can also be adjusted to run in a cluster environment.  
 
@@ -19,6 +19,10 @@ Download and compile the source code from the above URLs and make the binary exe
 
 
 
-# Step 2: data preparation
+## Step 2: data preparation
+
+After standard QC and pre-processing steps, the genotype-phenotype information of each gene should be organized into a single text file. The file format is explained in [here](https://github.com/xqwen/dap/wiki/Case-study:-multi-SNP-fine-mapping#genotype-phenotype-data-file-required).  The formatted genotype-phenotype data files for 11,837 genes in GEUVADIS TSI samples can be downloaded from [here](http://www-personal.umich.edu/~xwen/download/qtl_example/geuv.tsi.eqtl.sbams.tgz)
+
+
 
 
