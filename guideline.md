@@ -21,9 +21,9 @@ Download and compile the source code from the above URLs and make the binary exe
 
 ## Step 2: data preparation
 
-After standard QC and pre-processing steps, the genotype-phenotype information of each gene should be organized into a single text file. The file format is explained in [here](https://github.com/xqwen/dap/wiki/Case-study:-multi-SNP-fine-mapping#genotype-phenotype-data-file-required).  The formatted genotype-phenotype data files for 11,837 genes in GEUVADIS TSI samples can be downloaded from [here](http://www-personal.umich.edu/~xwen/download/qtl_example/geuv.tsi.eqtl.sbams.tgz).
+After standard QC and pre-processing steps, the genotype-phenotype information of each gene should be organized into a single text file. The file format is explained in [here](https://github.com/xqwen/dap/wiki/Case-study:-multi-SNP-fine-mapping#genotype-phenotype-data-file-required).  The formatted genotype-phenotype data files for 11,837 genes in GEUVADIS TSI samples, ```geuv.tsi.eqtl.sbams.tgz```, can be downloaded from [here](http://www-personal.umich.edu/~xwen/download/qtl_example/geuv.tsi.eqtl.sbams.tgz).
 
-The illustrated analysis also utilizes SNP and gene position information. The SNP position file can be downloaded from [here](http://www-personal.umich.edu/~xwen/download/qtl_example/geuv.snp.map.gz). The Gene position file can be downloaded from [here](http://www-personal.umich.edu/~xwen/download/qtl_example/geuv.gene.map.gz).
+The illustrated analysis also utilizes SNP and gene position information. The SNP position file, ```geuv.snp.map.gz```, can be downloaded from [here](http://www-personal.umich.edu/~xwen/download/qtl_example/geuv.snp.map.gz). The Gene position file, ```geuv.gene.map.gz```, can be downloaded from [here](http://www-personal.umich.edu/~xwen/download/qtl_example/geuv.gene.map.gz).
 
 ## Step 3: set up working directory
 
@@ -48,7 +48,7 @@ where ```gene_name.dat``` a single sbams format genotype-expression file.
 
 For batch processing,
 
-1. download ```batch_scan.pl``` from the [repo]() into the ```workspace``` directory
+1. download ```batch_scan.pl``` from the [repo](https://github.com/xqwen/qtl_pipeline/tree/master/scripts) into the ```workspace``` directory
 2. create directory ```workspace/scan_out```
 3. run ```perl batch_scan.pl > batch_scan.cmd```
 4. batch processing by ```openmp_wraper -d batch_scan.cmd -t 8``` where "-t 8" specifices that 8 parallel threads are requested.
@@ -82,7 +82,9 @@ The command line options are explained in below
 
 For batch processing,
 
-1. download ```batch_dap.pl``` from the [repo]() into the ```workspace``` directory
+1. download ```batch_dap.pl``` from the [repo](https://github.com/xqwen/qtl_pipeline/tree/master/scripts) into the ```workspace``` directory
 2. create directory ```workspace/dap_out```
 3. run ```perl batch_dap.pl > batch_dap.cmd```
 4. batch processing by ```openmp_wraper -d batch_dap.cmd -t 4``` where "-t 4" specifices that 8 parallel threads are requested.
+
+The result files are output to the directory ```dap_out```.
