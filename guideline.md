@@ -38,14 +38,17 @@ Before the multi-SNP mapping, we first set the prior for each candidate cis-SNP.
 
 ### Step 4.1: obtain single-SNP association test statistics
 
-If the eQTL data are already analyzed by either [```MatrixEQTL```]() or [```fastQTL```](), the output from either software can be fed into ```torus``` for prior estimation. Alternatively, single-SNP Bayes factor can be computed by ```dap-g``` using the following command
+If the eQTL data are already analyzed by either [```MatrixEQTL```](http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/) or [```fastQTL```](http://fastqtl.sourceforge.net/), the output from either software can be fed into ```torus``` for prior estimation.
+
+Alternatively, single-SNP Bayes factor can be computed by ```dap-g``` using the following command
 ```
  dap-g -d gene_name.dat -scan > gene_name.bf
 ```
 where ```gene_name.dat``` a single sbams format genotype-expression file.
 
 For batch processing,
-1. download ```batch_scan.pl``` from the [repo]() into the ````workspace``` directory
+
+1. download ```batch_scan.pl``` from the [repo]() into the ```workspace``` directory
 2. create directory ```workspace/scan_out```
 3. run ```perl batch_scan.pl > batch_scan.cmd```
 4. batch processing by ```openmp_wraper -d batch_scan.cmd -t 8``` where "-t 8" specifices that 8 parallel threads are requested.
@@ -76,8 +79,10 @@ The command line options are explained in below
   *  ```-ld_control 0.25```: lower r^2 threshold for ```dap-g``` to consider multiple SNPs (in LD) responsible to a single association signal. (if not specified, the thereshold is 0)
   *  ```--no_size_limit``` : do not restrict the number of SNPs within a single association signal cluster (the default value is set to be 25)
 
+
 For batch processing,
-1. download ```batch_dap.pl``` from the [repo]() into the ````workspace``` directory
+
+1. download ```batch_dap.pl``` from the [repo]() into the ```workspace``` directory
 2. create directory ```workspace/dap_out```
 3. run ```perl batch_dap.pl > batch_dap.cmd```
 4. batch processing by ```openmp_wraper -d batch_dap.cmd -t 4``` where "-t 4" specifices that 8 parallel threads are requested.
