@@ -1,0 +1,180 @@
+#!/usr/bin/perl
+
+# define the path to cluster_pip.R here
+
+
+
+
+$gene_name = "";
+
+$Rpath = ".";
+
+$thresh = 0.5;
+
+for ($i=0;$i<=$#ARGV;$i++){
+
+    if($ARGV[$i] eq "-h"){
+	printf STDERR "USAGE: plot_dap.pl -d dap_output_file -s sbams_input_file -m map_file -gene gene_name\n";
+	exit(0);
+    }
+    
+    if($ARGV[$i] eq "-d"){
+	$rst_file = $ARGV[++$i];
+	next;
+    }
+
+    if($ARGV[$i] eq "-s"){
+	$sbams_file = $ARGV[++$i];
+	next;
+    }
+
+    if($ARGV[$i] eq "-m"){
+	$map_file = $ARGV[++$i];
+	next;
+    }
+
+    if($ARGV[$i] eq "-gene" || $ARGV[$i] eq "-g"){
+	$gene_name = $ARGV[++$i];
+	next;
+    }
+    
+    
+    if($ARGV[$i] eq "-Rpath"){
+	$Rpath = $ARGV[++$i];
+	next;
+    }
+
+    if($ARGV[$i] eq "--save"){
+	$save_option = 1;
+	next;
+    }
+    
+}
+
+$Rplotter = "$Rpath/DAP_plot.R";
+
+if(! -e "$Rplotter"){
+    print STDERR "Error: can't locate DAP_plot.R, specifiy the path by \"-Rpath\" option";
+    exit;
+}
+
+if(! -e "$rst_file" ){
+    print STDERR "Error: can't open DAP result file\n";
+    exit;
+}
+
+if(! -e "$sbams_file" ){
+    print STDERR "Error: can't open genotype file\n";
+    exit;
+}
+
+if(! -e "$map_file" ){
+    print STDERR "Error: can't open map file\n";
+    exit;
+}
+
+
+
+
+
+# get clusters to plot
+
+open FILE, "grep \{ $rst_file | ";
+while(<FILE>){
+    my @data  = split /\s+/, $_;
+    shift @data until $data[0]=~/^\S/;
+    next if ($data[2]<$thresh);
+    $data[0]=~/\{(\d+)/;
+    $cluster{$1} = $data[2];
+}
+
+$nclust = scalar(keys %cluster);
+
+if($nclust == 0){
+    print "No cluster (with PIP > $thresh) indentified\n";
+    exit;
+}
+
+open FILE, "grep \"\(\" $rst_file | ";
+while(<FILE>){
+
+    my @data  = split /\s+/, $_;
+    shift @data until $data[0]=~/^\S/;
+    
+    next if !defined($cluster{$data[-1]});
+    next if $data[2] < 0.01;
+    $snp{$data[1]} = { pip => $data[2],
+		       cluster => $data[-1] };
+}
+
+
+open FILE, "$map_file";
+while(<FILE>){
+
+    next if $_ !~ /\d/;
+    my @data  = split /\s+/, $_;
+    shift @data until $data[0]=~/^\S/;
+
+    next if !defined($snp{$data[0]});
+    chomp;
+    $snp{$data[0]}->{pos} = $data[2];
+    $snp{$data[0]}->{out} = sprintf "$_  %7.3f  %2d", $snp{$data[0]}->{pip}, $snp{$data[0]}->{cluster};
+}
+
+
+
+open FILE, "grep geno $sbams_file |";
+while(<FILE>){
+
+    my @data = split /\s+/, $_;
+    shift @data until $data[0]=~/^\S/;
+    next if !defined($snp{$data[1]});
+    chomp;
+    my $s = $data[1];
+    shift @data for (1..3);
+    $snp{$s}->{geno} = "@data";
+}
+
+
+$suffix = time() . "_" . rand();
+$temp_pip_file = ".dap_pip.". $suffix;
+$temp_geno_file = ".geno.". $suffix;
+open OUT1, ">$temp_pip_file";
+open OUT2, ">$temp_geno_file";
+
+sub by_snp {
+    if($snp{$a}->{cluster} < $snp{$b}->{cluster}){
+	return -1;
+    }
+    if($snp{$a}->{cluster} > $snp{$b}->{cluster}){
+	return 1;
+    }
+
+    if($snp{$a}->{cluster} == $snp{$b}->{cluster}){
+	if($snp{$a}->{pos} > $snp{$b}->{pos}){
+	    return 1;
+	}else{
+	    return -1; 
+	}
+    }
+}
+
+foreach $s ( sort by_snp keys %snp){
+#foreach $s ( sort {$snp{$a}->{pos} <=> $snp{$b}->{pos} } keys %snp){
+    
+    print OUT1 "$snp{$s}->{out}\n";
+    print OUT2 "$snp{$s}->{geno}\n";
+}
+
+
+$R_plotter = "DAP_plot.R";
+$rst = `Rscript $R_plotter $temp_pip_file $temp_geno_file $gene_name`;
+
+if($save_option == 1){
+    `mv $temp_pip_file dap_pip.saved.dat`;
+    `mv $temp_geno_file dap_geno.saved.dat`;
+}
+
+unlink $temp_pip_file, $temp_geno_file;
+
+
