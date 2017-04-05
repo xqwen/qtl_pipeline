@@ -2,19 +2,33 @@
 
 # define the path to cluster_pip.R here
 
+use Cwd 'abs_path';
+
+$home = $ENV{"HOME"};
+
+$gene_name = "UNNAMED";
 
 
-
-$gene_name = "";
-
-$Rpath = ".";
 
 $thresh = 0.5;
+
+# read default configuration file
+$Rpath = ".";
+if( -e "$home/.dap.config"){
+    open FILE, "grep RPATH $home/.dap.config |";
+    while(<FILE>){
+	/\s*RPATH\s+(\S+)/;
+	$Rpath = $1;
+    }
+}
+	
+    
+
 
 for ($i=0;$i<=$#ARGV;$i++){
 
     if($ARGV[$i] eq "-h"){
-	printf STDERR "USAGE: plot_dap.pl -d dap_output_file -s sbams_input_file -m map_file -gene gene_name\n";
+	printf STDERR "USAGE: plot_dap -d dap_output_file -s sbams_input_file -m map_file -gene gene_name [-Rpath directory_containing_DAP_plot_dot_R]\n";
 	exit(0);
     }
     
@@ -51,11 +65,19 @@ for ($i=0;$i<=$#ARGV;$i++){
     
 }
 
+
 $Rplotter = "$Rpath/DAP_plot.R";
 
 if(! -e "$Rplotter"){
-    print STDERR "Error: can't locate DAP_plot.R, specifiy the path by \"-Rpath\" option";
+    print STDERR "Error: can't locate DAP_plot.R, specifiy the path by \"-Rpath\" option\n";
+    unlink "$home/.dap.config" if -e "$home/.dap.config";
     exit;
+}else{
+    if(! -e "$home/.dap.config"){
+	open OUT, "> $home/.dap.config";
+	printf OUT "RPATH  %s\n", abs_path($Rpath);
+	close OUT;
+    }
 }
 
 if(! -e "$rst_file" ){
@@ -167,8 +189,15 @@ foreach $s ( sort by_snp keys %snp){
 }
 
 
-$R_plotter = "DAP_plot.R";
-$rst = `Rscript $R_plotter $temp_pip_file $temp_geno_file $gene_name`;
+
+
+$pip_file = abs_path($temp_pip_file);
+$geno_file = abs_path($temp_geno_file);
+
+$rst = `Rscript $Rplotter $pip_file $geno_file $gene_name 2>/dev/null`;
+
+
+
 
 if($save_option == 1){
     `mv $temp_pip_file dap_pip.saved.dat`;
