@@ -2,7 +2,7 @@
 
 ## 1. Plotting DAP results
 
-The utility script ```plot_dap``` helps visualizing the DAP fine-mapping results. It provides a scatter plot of PIPs for all noteworthy SNPs (SNP-level PIP > 0.01) identified in each association signal cluster. A complementry LDHeatmap plot is also provided to illustrate the correlation between genotypes of each plotted SNP. 
+The utility script ```plot_dap``` helps visualizing the DAP fine-mapping results. It provides a scatter plot of PIPs for all member SNPs in a noteworthy signal cluster (cluster PIP > 0.50) identified in each association signal cluster. A complementry LDHeatmap plot is also provided to illustrate the correlation between genotypes of each plotted SNP. 
 
 ### 1.1 Setup
 
@@ -32,6 +32,11 @@ where
 * ```dap_output_file```:  the output file from ```dap-g```
 * ```sbams_input_file```: the input sbams file for ```dap-g``` run
 * ```map_file```: map file containing genomic position info for all SNPs in the sbams file
+
+The map file is in text format and contains the following three columns
+```
+snp_name   chromosome   position
+```
 
 We have provided a set of examples in the ```plot_example_files``` directory. In our example file, the SNP is coded by its position information, and the map file can be simply made by the following one-liner
 
