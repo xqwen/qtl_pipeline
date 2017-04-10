@@ -51,7 +51,7 @@ For batch processing,
 1. download ```batch_scan.pl``` from the [repo](https://github.com/xqwen/qtl_pipeline/tree/master/scripts) into the ```workspace``` directory
 2. create directory ```workspace/scan_out```
 3. run ```perl batch_scan.pl > batch_scan.cmd```
-4. batch processing by ```openmp_wraper -d batch_scan.cmd -t 8``` where "-t 8" specifices that 8 parallel threads are requested.
+4. batch processing by ```openmp_wrapper -d batch_scan.cmd -t 8``` where "-t 8" specifices that 8 parallel threads are requested.
 5. upon completion, obtain the combine the data by ```cat scan_out/*.bf | gzip - > geuv.tsi.bf.gz``` 
 
 The output ```guev.tsi.bf.gz``` should appear in ```workspace``` upon completion.
@@ -85,6 +85,12 @@ For batch processing,
 1. download ```batch_dap.pl``` from the [repo](https://github.com/xqwen/qtl_pipeline/tree/master/scripts) into the ```workspace``` directory
 2. create directory ```workspace/dap_out```
 3. run ```perl batch_dap.pl > batch_dap.cmd```
-4. batch processing by ```openmp_wraper -d batch_dap.cmd -t 4``` where "-t 4" specifices that 8 parallel threads are requested.
+4. batch processing by ```openmp_wrapper -d batch_dap.cmd -t 4``` where "-t 4" specifices that 8 parallel threads are requested.
 
 The result files are output to the directory ```dap_out```.
+
+## Step 6: Post-analysis utility ties
+
+Utilities for summarizing and visualizing fine-mapping analysis results, along with their demonstrations, are provided in [this repo](https://github.com/xqwen/qtl_pipeline/tree/master/utility).  The utilities include
+
+- Signal cluster visualization: ```plot_dap```
