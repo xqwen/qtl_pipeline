@@ -9,10 +9,12 @@ The described analysis is performed in a single multi-core Linux box. The proced
 ## Step 1: software installation
 
 The following binary executables are ***required*** by the analysis
+
   * [dap-g](https://github.com/xqwen/dap/tree/master/dap_greedy_src): the newest implementation of the DAP algorithm for multi-SNP fine-mapping
   * [torus](https://github.com/xqwen/dap/tree/master/torus_src): for prior specification
 
 The following utility is recommended
+
   * [openmp-wrapper](https://github.com/xqwen/openmp_wrapper): for automatic multi-thread processing
 
 Download and compile the source code from the above URLs and make the binary executables accessible to the analysis.
