@@ -137,9 +137,13 @@ while(<FILE>){
     my @data  = split /\s+/, $_;
     shift @data until $data[0]=~/^\S/;
 
-    next if !defined($snp{$data[0]});
+#    next if !defined($snp{$data[0]});
     
     chomp;
+    if(!defined($snp{$data[0]}->{pip})){
+	    $snp{$data[0]}->{pip} = 0;
+	    $snp{$data[0]}->{cluster} =-1;
+    }
     $snp{$data[0]}->{pos} = $data[2];
     $snp{$data[0]}->{out} = sprintf "$_  %7.3f  %2d", $snp{$data[0]}->{pip}, $snp{$data[0]}->{cluster};
 }
@@ -186,7 +190,7 @@ foreach $s ( sort by_snp keys %snp){
 #foreach $s ( sort {$snp{$a}->{pos} <=> $snp{$b}->{pos} } keys %snp){
     
     print OUT1 "$snp{$s}->{out}\n";
-    print OUT2 "$snp{$s}->{geno}\n";
+    print OUT2 "$snp{$s}->{geno}\n"; 
 }
 
 
