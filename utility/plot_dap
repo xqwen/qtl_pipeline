@@ -23,7 +23,7 @@ if( -e "$home/.dap.config"){
 }
 	
     
-
+$plot_thresh = 1e-3;
 
 for ($i=0;$i<=$#ARGV;$i++){
 
@@ -60,6 +60,11 @@ for ($i=0;$i<=$#ARGV;$i++){
 
     if($ARGV[$i] eq "--save"){
 	$save_option = 1;
+	next;
+    }
+
+    if($ARGV[$i] eq "-t"){
+	$plot_thresh = $ARGV[++$i];
 	next;
     }
     
@@ -145,7 +150,7 @@ while(<FILE>){
 	    $snp{$data[0]}->{cluster} =-1;
     }
     $snp{$data[0]}->{pos} = $data[2];
-    $snp{$data[0]}->{out} = sprintf "$_  %7.3f  %2d", $snp{$data[0]}->{pip}, $snp{$data[0]}->{cluster};
+    $snp{$data[0]}->{out} = sprintf "$_  %7.3e  %2d", $snp{$data[0]}->{pip}, $snp{$data[0]}->{cluster};
 }
 
 
@@ -199,7 +204,7 @@ foreach $s ( sort by_snp keys %snp){
 $pip_file = abs_path($temp_pip_file);
 $geno_file = abs_path($temp_geno_file);
 
-$rst = `Rscript $Rplotter $pip_file $geno_file $gene_name 2>/dev/null`;
+$rst = `Rscript $Rplotter $pip_file $geno_file $gene_name $plot_thresh 2>/dev/null`;
 
 
 

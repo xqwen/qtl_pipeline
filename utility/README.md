@@ -25,13 +25,14 @@ biocLite("chopsticks")
 
 The command line for plotting the DAP data is
 ```
-plot_dap -d dap_output_file -s sbams_input_file -m map_file -gene gene_name [-Rpath directory_containing_DAP_plot_dot_R]
+plot_dap -d dap_output_file -s sbams_input_file -m map_file -gene gene_name [-Rpath directory_containing_DAP_plot_dot_R] [-t snp_level_pip_threshold]
 ```
 where
 
 * ```dap_output_file```:  the output file from ```dap-g```
 * ```sbams_input_file```: the input sbams file for ```dap-g``` run
 * ```map_file```: map file containing genomic position info for all SNPs in the sbams file
+* ```snp_level_pip_threshold```: only SNPs with PIP above the specified threshold within a cluster will be plotted. The default value is set to 1e-3.
 
 The map file is in text format and contains the following three columns
 ```

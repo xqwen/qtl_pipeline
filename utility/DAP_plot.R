@@ -12,7 +12,7 @@ attach(d)
 if(length(args) == 4){
   thresh = as.numeric(args[4])
 }else{
-  thresh = 0.0
+  thresh = 1e-3
 }
 
 pip_plot_file = paste(gene,"_pip_plot.pdf",sep="")
@@ -36,7 +36,7 @@ yv = V4[set]
 plot(yv~pos,xlab= "Genomic Position (kb) ", ylab = "Posterior Inclusion Probability",ylim=c(0.0,1), xlim = c(min(pos)-0.02*length, max(pos)+0.22*length),cex= 0.85, main = paste(gene, " (",V2[1],")", sep="")  )
 #colors = sample(colv,length(seq))
 sapply(seq, function(x) points(V4[V5==x&V4>thresh]~Posv[V5==x&V4>thresh],pch=16,col=colv[x],cex=0.8))
-pipv = sapply(seq, function(x) sum(V4[V5==x&V4>thresh]))
+pipv = round(sapply(seq, function(x) sum(V4[V5==x&V4>thresh])),3)
 countv = sapply(seq, function(x) length(V4[V5==x&V4>thresh]))
 labels = paste("cluster",seq, " (PIP=", pipv,  ", p=",countv, ")",sep="")
 legend("topright", labels,pch=15,col=colv[1:nc])
